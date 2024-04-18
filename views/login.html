@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login_project.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg px-3">
+        <div class="navbar-nav mr-auto">
+            <a id="log" class="nav-item nav-link" href="/login">Login</a>
+            <a id="reg" class="nav-item nav-link" href="/register">Register</a>
+        </div>
+        <h1 class="navbar-brand mx-auto text-white" style="width: 227px;">Login</h1>
+    </nav>
+    <div class="mid">
+        <form action="/login" method="post" style="text-align: center;" >
+            <img src="/img/Mae-Fah-Luang-University-2.png" class="rounded" alt="Cinque Terre" width="115" height="120">
+            <br><br>
+            <h2 style="text-align: center; ">Login</h2>
+            <div id="message" class="alert alert-danger" style="display: none;"></div>
+            <div style="text-align: left;">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" style="width: 100%;">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" style="width: 100%;">
+                <br>
+            </div>
+            <button type="submit" class="btn btn-danger text-white" >Login</button>
+        </form>
+    </div>
+
+    <script>
+        // Parse URL to get flash message
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+
+        // Display flash message if it exists
+        if (message) {
+            document.getElementById("message").innerText = decodeURIComponent(message);
+            document.getElementById("message").style.display = "block";
+        }
+    </script> 
+</body>
+</html>

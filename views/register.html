@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/register_project.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg px-3">
+        <div class="navbar-nav mr-auto">
+            <a id="log" class="nav-item nav-link" href="/login">Login</a>
+            <a id="reg" class="nav-item nav-link" href="/register">Register</a>
+        </div>
+        <h1 class="navbar-brand mx-auto text-white" style="width: 250px;">Register</h1>
+    </nav>
+    <div class="mid">
+        <form  action="/register"  method="post" style="text-align: center;">
+            <img src="/img/Mae-Fah-Luang-University-2.png" class="rounded" alt="Cinque Terre" width="77" height="80">
+            <br><br>
+            <h2 style="text-align: center; ">Register</h2>
+            <div style="text-align: left;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div style="width: 48%;">
+                        <label for="fname">First Name</label>
+                        <input type="text" id="fnamei" name="firstname" style="width: 100%;" required>
+                    </div>
+                    <div style="width: 48%;">
+                        <label for="lname" >Last Name</label>
+                        <input type="text" id="lnamei" name="lastname" style="width: 100%;" required >
+                    </div>
+                </div>
+                <label for="pn">Phone Number</label>
+                <input type="text" id="pni" name="phone" style="width: 100%;" >
+            </div>
+            <div style="text-align: left;" >
+                <label for="email" class="required">Email</label>
+                <input type="text" id="email" name="email" style="width: 100%;" >
+                <label for="password" >Password</label>
+                <input type="password" id="password" name="password" style="width: 100%;" >
+                
+            </div>
+            <button class="btn btn-danger text-white" type="submit">   Register  </button>    
+        </form>
+
+    </div>
+
+
+    <script>
+        document.getElementById("log").addEventListener("click", function(event){
+            event.preventDefault(); 
+            window.location.href = "/login"; 
+        });
+    </script>
+</body> 
+</html>
