@@ -43,16 +43,6 @@ app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register.html'));
 });
 
-// Route for login page
-app.get('/login', (req, res) => {
-    let filePath = path.join(__dirname, 'views', 'login.html');
-    const message = req.flash('message');
-    if (message.length > 0) {
-        filePath += `?message=${encodeURIComponent(message[0])}`;
-    }
-    res.sendFile(filePath);
-});
-
 // Route for handling registration form submission
 app.post('/register', (req, res) => {
     const { firstname, lastname, phone, email, password } = req.body;
@@ -72,6 +62,12 @@ app.post('/register', (req, res) => {
     });
 });
 
+// Route for login page
+app.get('/login', (req, res) => {
+    res.sendFile (path.join(__dirname, 'views', 'login.html'));
+});
+
+
 // Route for handling login form submission
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
@@ -82,16 +78,14 @@ app.post('/login', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
         if (result.length === 0) {
-            req.flash('message', 'User does not exist');
-            return res.redirect('/login');
+            return res.status(404).send('User does not exist');
         }
 
         const user = result[0];
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            req.flash('message', 'Incorrect Password!');
-            return res.redirect('/login');
+            return res.status(500).send('Incorrect Password!');
         }
 
         req.session.userId = user.id;
@@ -189,14 +183,15 @@ app.get('/lecturer_dashboard', (req, res) => {
     });
 });
 
-// Rout for login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
-
-// Rote for register 
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'register.html'));
+app.get('/logout', (req, res) => {
+    // Destroy the session and redirect the user to the login page
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.redirect('/login');
+    });
 });
 
 app.listen(8000, () => {
