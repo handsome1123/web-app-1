@@ -1,42 +1,52 @@
 const express = require('express');
-const mysql = require('mysql');
-const app = express();
 const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
 const session = require('express-session');
-const flash = require('connect-flash');
+const MemoryStore = require('memorystore')(session);
 const path = require('path');
+const con = require('./config/db');
 
-// Connect-flash
-app.use(flash());
+const app = express();
+
 
 // Define a static directory to serve CSS and other static files
-app.use(express.static('public'));
+app.use(('/public', express.static(path.join(__dirname, 'public'))));
 
 // Session storage 
 app.use(session({
+    cookie: { maxAge: 24 * 60 * 1000 }, //one day in millisecond
     secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: true,
+
+    // config MemoryStore here 
+    store: new MemoryStore({
+        checkPeriod: 24 * 60 * 1000 // expired entries every 24 hours
+    })
 }));
 
 // To use bodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Connect to database 
-const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'web_pro'
-});
+
 
 // Check database connection 
 con.connect(function (err) {
     if (err) throw err;
     console.log('Database is connected');
 });
+
+// Create hashed password
+// app.get('/password/:pass', function (req, res) {
+//     const password = req.params.pass;
+//     const saltRounds = 10;
+//     bcrypt.hash(password, saltRounds, function (err, hash) {
+//         if (err) {
+//             return res.status(500).send("Hashing error");
+//         }
+//         res.send(hash);
+//     });
+// });
 
 // Route for register page
 app.get('/register', (req, res) => {
@@ -52,11 +62,9 @@ app.post('/register', (req, res) => {
         con.query(query, [firstname, lastname, phone, email, hash], (err, result) => {
             if (err) {
                 console.log(err);
-                req.flash('message', 'Account creation failed');
-                res.redirect('/register');
+                return res.status(500).send('Internal Server Error');
             } else {
-                req.flash('message', 'Registration successful');
-                res.redirect('/login');
+                res.sendFile(path.join(__dirname, 'views', 'login.html'));
             }
         });
     });
@@ -64,124 +72,74 @@ app.post('/register', (req, res) => {
 
 // Route for login page
 app.get('/login', (req, res) => {
-    res.sendFile (path.join(__dirname, 'views', 'login.html'));
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
-
 
 // Route for handling login form submission
-app.post('/login', (req, res) => {
+app.post('/login', function (req, res) {
     const { email, password } = req.body;
-
-    const query = 'SELECT * FROM user WHERE email = ?';
-    con.query(query, [email], async (err, result) => {
+    const query = 'SELECT id, password, role FROM user WHERE email = ?';
+    con.query(query, [email], function (err, results) {
         if (err) {
+            console.error(err);
             return res.status(500).send('Internal Server Error');
         }
-        if (result.length === 0) {
-            return res.status(404).send('User does not exist');
+        if (results.length !== 1) {
+            return res.status(401).send('Wrong username or password');
         }
 
-        const user = result[0];
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        // Check password
+        bcrypt.compare(password, results[0].password, function (err, same) {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Server error');
+            }
 
-        if (!passwordMatch) {
-            return res.status(500).send('Incorrect Password!');
-        }
+            if (same) {
+                // Store user information in session
+                req.session.userID = results[0].id;
+                req.session.email = email;
+                req.session.role = results[0].role;
 
-        req.session.userId = user.id;
-
-        switch(user.role) {
-            case 'staff':
-                return res.redirect('/staff_dashboard');
-            case 'lecturer':
-                return res.redirect('/lecturer_dashboard');
-            case 'user':
-                return res.redirect('/index');
-            default:
-                return res.status(400).send('Unknown User Role!');
-        }
+                // Redirect based on user role
+                switch (results[0].role) {
+                    case 'staff':
+                        return res.send('/staff_dashboard');
+                    case 'lecturer':
+                        return res.send('/lecturer_dashboard');
+                    case 'user':
+                        return res.send('/user');
+                    default:
+                        return res.status(500).send('Invalid user role');
+                }
+            } else {
+                return res.status(401).send("Wrong username or password");
+            }
+        });
     });
 });
 
-// Route for rendering index page
-app.get('/index', (req, res) => {
-    if(!req.session || !req.session.userId) {
-        return res.redirect('/login');
-    }
-
-    const userId = req.session.userId;
-    con.query('SELECT * FROM user WHERE id = ?', [userId],(error, results) => {
-        if(error){
-            return res.status(500).json({message: 'Internal server error'});
-        }
-
-        if(results.length === 0){
-            return res.status(404).json({message: 'User not found'});
-        }
-
-        const user = results[0];
-
-        if(user.role !== 'user'){
-            return res.redirect('/login');
-        } 
-
-        res.sendFile(path.join(__dirname, 'views', 'index.html'));
-    });
+// get user info 
+app.get('/userInfo', function (req, res) {
+    res.json({ "userID": req.session.userID, "useremail": req.session.email });
 });
 
-// Route for rendering staff dashboard
-app.get('/staff_dashboard', (req, res) => {
-    if(!req.session || !req.session.userId) {
-        return res.redirect('/login');
-    }
-
-    const userId = req.session.userId;
-    con.query('select * from user where id = ?', [userId],(error, results) => {
-        if(error){
-            req.flash('message','Internal server error!');
-            return res.redirect('/login');
-        }
-
-        if(results.length=== 0){
-            req.flash('message','User not found!');
-            return res.redirect('/login');
-        }
-
-        const user = results[0];
-
-        if(user.role != 'staff'){
-            return res.redirect('/login');
-        } 
-        res.sendFile(path.join(__dirname, 'views', 'staff_dashboard.html'));
-    });
+// Route for rendering lecturer dashboard
+app.get('/user', function (_req, res) {
+    res.sendFile(path.join(__dirname, 'views/user_roomlist.html'));
 });
 
 // Route for rendering lecturer dashboard
 app.get('/lecturer_dashboard', (req, res) => {
-    if(!req.session || !req.session.userId) {
-        return res.redirect('/login');
-    }
-
-    const userId = req.session.userId;
-    con.query('select * from user where id = ?', [userId],(error, results) => {
-        if(error){
-            req.flash('message','Internal server error!');
-            return res.redirect('/login');
-        }
-
-        if(results.length=== 0){
-            req.flash('message','User not found!');
-            return res.redirect('/login');
-        }
-
-        const user = results[0];
-
-        if(user.role != 'lecturer'){
-            return res.redirect('/login');
-        } 
-        res.sendFile(path.join(__dirname, 'views', 'lecturer_dashboard.html'));
-    });
+    res.sendFile(path.join(__dirname, 'views/lecturer_dashboard.html'));
 });
+
+// Route for rendering staff dashboard
+app.get('/staff_dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/staff_dashboard.html'));
+});
+
+
 
 app.get('/logout', (req, res) => {
     // Destroy the session and redirect the user to the login page
@@ -194,6 +152,12 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.listen(8000, () => {
-    console.log('Server is running');
+// root service
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'views/login.html'));
+})
+
+const PORT = 8000;
+app.listen(PORT, () => {
+    console.log('Server is running at port ' + PORT);
 });
