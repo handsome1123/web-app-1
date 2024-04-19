@@ -141,16 +141,19 @@ app.get('/staff_dashboard', (req, res) => {
 
 
 
-app.get('/logout', (req, res) => {
-    // Destroy the session and redirect the user to the login page
-    req.session.destroy((err) => {
+// Route for handling logout
+app.get('/logout', function (req, res) {
+    // Clear the session data
+    req.session.destroy(function (err) {
         if (err) {
-            console.error('Error destroying session:', err);
+            console.error(err);
             return res.status(500).send('Internal Server Error');
         }
+        // Redirect to the login page after logout
         res.redirect('/login');
     });
 });
+
 
 // root service
 app.get('/', function (req, res) {
