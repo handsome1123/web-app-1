@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My account (user)</title>
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/css/my_account_user.css">
-    <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <script src="/public/js/sweetalert2@11.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/my_account_user.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sweetalert2@11.js"></script>
 <style>
     .tab-bar {
         background-color: #9A1212;
@@ -58,7 +58,7 @@
           <a  href="bookingroom.html" >Home</a>
           <a  href="#" style="color:#F39595;">My account</a>
           <a  href="mybooking.html" >My booking</a>
-          <button class="btn btn-danger" id="btnLogout">Log out</button>
+          <button class="btn btn-danger" id="btnLogout"><a href="/logout">Logout</a></button>
         </div>
       </div>
 
@@ -75,11 +75,12 @@
                 </div>
                 
                 <div style="margin-left: 20px;">
-                    <p>student ID: 7531501136</p>
-                    <p>Email: nobi.no@lamduan.mfu.ac.th</p>
-                    <p>Name : Nobi</p>
-                    <p>Lastname: Nobita</p>
-                    <p>Phone: 0788888889</p>
+ 
+                    <p>Email: <span id="useremail" class="text-white me-3 mt-2">useremail</span></p>
+                    </p>
+                    <p>First Name : <span id="fname" class="text-white me-3 mt-2">useremail</span></p>
+                    <p>Last name: <span id="lname" class="text-white me-3 mt-2">useremail</span></p>
+                    <p>Phone: <span id="phone" class="text-white me-3 mt-2">useremail</span></p>
                 </div>
                 
 
@@ -110,6 +111,8 @@
                     <span id="b3"> <button class="btn">></button> </span>
                 </div>
             </div>
+
+            
         </div>
     </div>
     <!-- footer -->
@@ -137,7 +140,7 @@
             </div>
         </div>
     </footer>
-    <script src="/public/js/my_account_user.js"></script>
+    <script src="/js/my_account_user.js"></script>
     
 </body>
 

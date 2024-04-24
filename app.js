@@ -135,6 +135,27 @@ app.get('/user/historyPage', function(_req, res) {
     res.sendFile(path.join(__dirname, 'views/my_account_user.html'));
 });
 
+// user history route
+app.get('/user/history', function (req, res) {
+    const userId = req.session.userID;
+    // Query database to get pending booking requests for the specific login user ID
+    const sql = `
+     SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path
+     FROM bookings 
+     JOIN rooms ON bookings.room_id = rooms.room_id 
+     JOIN time_slots ON bookings.slot_id = time_slots.slot_id 
+     WHERE bookings.status != 'pending' 
+       AND bookings.user_id = ?`;
+
+    con.query(sql, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Database server error");
+        }
+        res.json(results);
+    });
+});
+
 // Route for rendering lecturer dashboard
 app.get('/lecturer_dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views/lecturer_dashboard.html'));
