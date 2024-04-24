@@ -1,0 +1,143 @@
+/* nav bar */
+nav {
+    background-color: #9A1212;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+a {
+    color: white;
+    padding-right: 10px;
+
+}
+
+a:hover {
+    color: red;
+}
+
+#btnpage {
+    display: flex;
+    justify-content: end;
+    margin-right: 180px;
+    margin-top: 50px;
+}
+.tabBar{
+    margin-right: 10px;
+    color: #BC9945;
+}
+
+
+/* left side */
+#leftsidecard {
+    background-color: #CCA046;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-right: 45px;
+    height: 250px;
+}
+
+/* right side */
+#title {
+    display: flex;
+    justify-content: space-between;
+}
+
+#bgtitle {
+    background-color: goldenrod;
+    color: #9A1212;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 20px;
+    margin-right: 60px;
+    border-radius: 20px;
+}
+
+#ckin {
+    margin-left: 50px;
+}
+
+#ckout {
+    margin-right: 20px;
+}
+
+#date {
+    margin-left: 70px;
+    margin-right: 100px;
+}
+
+#b1 {
+    margin-right: 7px;
+    background-color: rgb(208, 201, 201);
+}
+
+#b2 {
+    margin-right: 7px;
+    background-color: rgb(208, 201, 201);
+}
+
+#b3 {
+    margin-right: 7px;
+    background-color: rgb(208, 201, 201);
+}
+/* footer */
+footer {
+    padding: 1rem;
+    background-color: #9A1212;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+#con {
+    display: flex;
+    justify-content: space-between;
+}
+
+.address {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.contact {
+    margin-left: 100px;
+}
+
+.library-hour {
+    margin-left: 100px;
+}
+
+.relate {
+    text-align: right;
+    flex-grow: 1;
+}
+
+.description {
+    font-size: 0.8em;
+}
+body {
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+.navbar a {
+    text-decoration: none; 
+}
+table {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+    border: #ffffff;
+    margin-left: 200px;
+  }
+  th{
+    color: #ffffff;
+  }
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #F1D9A0;
+    font-size: 15px;
+  }
+  #ma {
+    color: red;
+}

@@ -124,9 +124,15 @@ app.get('/userInfo', function (req, res) {
     res.json({ "userID": req.session.userID, "useremail": req.session.email });
 });
 
-// Route for rendering lecturer dashboard
+// Route for rendering user dashboard
 app.get('/user', function (_req, res) {
     res.sendFile(path.join(__dirname, 'views/user_roomlist.html'));
+});
+
+
+// Route for rendering user histroy 
+app.get('/user/historyPage', function(_req, res) {
+    res.sendFile(path.join(__dirname, 'views/my_account_user.html'));
 });
 
 // Route for rendering lecturer dashboard

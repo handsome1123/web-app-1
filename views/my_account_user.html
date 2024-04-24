@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My account (user)</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/my_account_user.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/sweetalert2@11.js"></script>
+<style>
+    .tab-bar {
+        background-color: #9A1212;
+        color: #fff;
+        padding: 20px;
+        padding-left: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tab-bar button {
+        background-color: #BB3838;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 5px 20px;
+        margin-left: 30px;
+        border-radius: 3px;
+    }
+    .tab-bar button:hover {
+        background-color: #454343;
+    }
+    .tab-bar .right-links a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 10px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .tab-bar .right-links a:hover {
+        color: #F39595;
+    }
+    .tab-bar .right-links a:not(:first-child)::before {
+      content: '|';
+      margin-right: 10px;
+      color: #BC9945; /* Change the color here */
+    }
+</style></head>
+<body>
+
+    <!-- navbar -->
+      <!-- header -->
+      <div class="tab-bar">
+        <div><h2>Booking room</h2></div>
+        <div class="right-links">
+          <img src="/public/img/notification-bell.png " width="30" height="30" >
+          <a  href="bookingroom.html" >Home</a>
+          <a  href="#" style="color:#F39595;">My account</a>
+          <a  href="mybooking.html" >My booking</a>
+          <button class="btn btn-danger" id="btnLogout">Log out</button>
+        </div>
+      </div>
+
+    <div class="">
+        <div class="row">
+
+            <!-- left side -->
+            <div class="col-sm-4">
+                <div class="" id="leftsidecard">
+                    <div class="mx-5 my-5">
+                        <img src="/public/img/user.png" alt="">
+                        <h4>Nobi Nobita</h4>
+                    </div>
+                </div>
+                
+                <div style="margin-left: 20px;">
+                    <p>student ID: 7531501136</p>
+                    <p>Email: nobi.no@lamduan.mfu.ac.th</p>
+                    <p>Name : Nobi</p>
+                    <p>Lastname: Nobita</p>
+                    <p>Phone: 0788888889</p>
+                </div>
+                
+
+
+            </div>
+
+            <!-- right side -->
+            <div class="col-sm-5 float-right">
+                <div class="mx-8 my-5">
+                            <table>
+                                <thead>
+                                  <tr style="background-color: #CCA046;" >
+                                    <th>Room</th>
+                                    <th>Date</th>
+                                    <th>check in</th>
+                                    <th>Check out</th>
+                                  </tr>
+                                </thead>
+                    <tbody id="bookingList">
+                        <!-- Bookings will be populated here dynamically -->
+                      </tbody>
+                    </table>
+                </div>
+            
+                <div style="margin-left: 130%;" class="" id="btnpage">
+                    <span id="b1"> <button class="btn"><</button> </span>
+                    <span id="b2"> <button class="btn">1</button> </span>
+                    <span id="b3"> <button class="btn">></button> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <footer class="text-white">
+        <div class="container" id="con">
+            <div class="address">
+                <h5>Address </h5>
+                <span class="description">Mae Fah Luang University 333 Moo 1 Tasud sub<br> District, Mueang District
+                    Chiang Rai 57100</span>
+            </div>
+            <div class="contact">
+                <h5>Contact</h5>
+                <span class="description">Tel 053316335<br> E-mail ask.library@mfu.ac.th</span>
+            </div>
+            <div class="library-hour">
+                <h5>Library Hour</h5>
+                <span class="description">Monday - Friday 8:00 — 19:30<br>Saturday - Sunday 10:00 — 18:00<br>"Living &
+                    Learning Zone" and "M-Learning Space" are open 08.00-22.00 hrs.</span>
+
+            </div>
+            <div class="relate">
+                <h5 class="mx-2">Relate Website</h5>
+                <span class="description">Mae Fah Luang University</span>
+
+            </div>
+        </div>
+    </footer>
+    <script src="/public/js/my_account_user.js"></script>
+    
+</body>
+
+</html>
+</body>
+
+</html>
